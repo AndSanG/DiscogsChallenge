@@ -14,9 +14,7 @@ struct RemoteArtistSearchLoaderTests {
         let baseURL = URL(string: "https://api.discogs.com")!
         let (sut, spy) = makeSUT(baseURL: baseURL)
         spy.stub(.success((makeSearchJSON(), makeResponse(statusCode: 200))))
-
         _ = try await sut.load(query: "Metallica", page: 1)
-
         #expect(spy.requests.count == 1)
         let url = try #require(spy.requests.first?.url)
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
@@ -27,6 +25,15 @@ struct RemoteArtistSearchLoaderTests {
         #expect(components?.queryItems?.contains(URLQueryItem(name: "type", value: "artist")) == true)
         #expect(components?.queryItems?.contains(URLQueryItem(name: "page", value: "1")) == true)
         #expect(components?.queryItems?.contains(URLQueryItem(name: "per_page", value: "30")) == true)
+    }
+
+    @Test func loadTwice_requestsDataFromURLTwice() async throws {
+        let (sut, spy) = makeSUT()
+        spy.stub(.success((makeSearchJSON(), makeResponse(statusCode: 200))))
+        spy.stub(.success((makeSearchJSON(), makeResponse(statusCode: 200))))
+        _ = try await sut.load(query: "Metallica", page: 1)
+        _ = try await sut.load(query: "Metallica", page: 1)
+        #expect(spy.requests.count == 2)
     }
 
     // MARK: - Helpers
