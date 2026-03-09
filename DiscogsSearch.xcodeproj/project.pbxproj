@@ -10,7 +10,9 @@
 		0211CB59AB292BEDA9A5BA1F /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F00326040D48C8BC9A39DC /* URLSessionHTTPClientTests.swift */; };
 		0FA96F7314DFA51F7AB96368 /* RemoteArtistSearchLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579ABCC4F1769D13299A8606 /* RemoteArtistSearchLoaderTests.swift */; };
 		1377CC188BFDB14E2B6815B9 /* ArtistReleasesMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737FD0B9BB0DA20B76D844B4 /* ArtistReleasesMapper.swift */; };
+		1C6861AAEAAB15A86BFC5A7F /* DiscogsSearchAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C712DA151918F9B7AA1E011C /* DiscogsSearchAPIEndToEndTests.swift */; };
 		1E2004C543C4B358553FE10D /* ArtistSearchMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96671F347E7708952614FA37 /* ArtistSearchMapper.swift */; };
+		2A8A0EBD6606AC6B0D60ED79 /* DiscogsSearch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 61E62A9D98B5AB7EDDCE670B /* DiscogsSearch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2FA7CA6B426065B3BE1B4F4E /* ArtistDetailMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD011F8563D23E571085B965 /* ArtistDetailMapper.swift */; };
 		330CBD5C25E01A46248E696E /* ArtistReleasesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F7348B121CB57E7DB5F2C2 /* ArtistReleasesLoader.swift */; };
 		398D677D05B6BAC96E44A234 /* RemoteArtistDetailLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A81F3512CEEEAFD9556F23B /* RemoteArtistDetailLoader.swift */; };
@@ -36,6 +38,7 @@
 		F655AEE4D20CC9AC7B836E4C /* DiscogsSearch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 61E62A9D98B5AB7EDDCE670B /* DiscogsSearch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F8D1822528AB09F6A039408C /* Release.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C8C0FC86A83A882DA9F3A4 /* Release.swift */; };
 		F90E652B9DFD4917D3A9A13D /* DiscogsSearchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CC2236E7A23F935B1AC39F /* DiscogsSearchApp.swift */; };
+		FC0B6B54E585623F192E15AD /* DiscogsSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E62A9D98B5AB7EDDCE670B /* DiscogsSearch.framework */; };
 		FE899B2F560F332E289A265C /* DiscogsSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E62A9D98B5AB7EDDCE670B /* DiscogsSearch.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +51,13 @@
 			remoteInfo = DiscogsSearch;
 		};
 		73416BD92A66B693DA32D185 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8C4E0D45FB49450464CDF3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 09644AB9CD8B84DD150F2736;
+			remoteInfo = DiscogsSearch;
+		};
+		B0AAC4447C64773DA8156C92 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D8C4E0D45FB49450464CDF3A /* Project object */;
 			proxyType = 1;
@@ -79,6 +89,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C16FE04B1E9A67DE6AA59108 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2A8A0EBD6606AC6B0D60ED79 /* DiscogsSearch.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +116,7 @@
 		5E6C389E125B7C61B268A372 /* RemoteArtistReleasesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteArtistReleasesLoader.swift; sourceTree = "<group>"; };
 		61E62A9D98B5AB7EDDCE670B /* DiscogsSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DiscogsSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A81F3512CEEEAFD9556F23B /* RemoteArtistDetailLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteArtistDetailLoader.swift; sourceTree = "<group>"; };
+		6DA81000BA5041643AD85B65 /* DiscogsSearchAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiscogsSearchAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		737FD0B9BB0DA20B76D844B4 /* ArtistReleasesMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistReleasesMapper.swift; sourceTree = "<group>"; };
 		832CD976288B7C9386F406BE /* ArtistSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchResult.swift; sourceTree = "<group>"; };
 		8BAC46891650E76643072750 /* ArtistDetailLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailLoader.swift; sourceTree = "<group>"; };
@@ -109,6 +131,7 @@
 		BA07D29DECC3C74AF7087D74 /* ArtistSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchLoader.swift; sourceTree = "<group>"; };
 		BA80F2A6A1C202BE52DBD267 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		BD82DF54E10C423FAFD2B883 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		C712DA151918F9B7AA1E011C /* DiscogsSearchAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscogsSearchAPIEndToEndTests.swift; sourceTree = "<group>"; };
 		CD011F8563D23E571085B965 /* ArtistDetailMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailMapper.swift; sourceTree = "<group>"; };
 		D0F7348B121CB57E7DB5F2C2 /* ArtistReleasesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistReleasesLoader.swift; sourceTree = "<group>"; };
 		D98F32D1D938857A4B95AECD /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
@@ -117,6 +140,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		194077923267C4AA0E20A908 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC0B6B54E585623F192E15AD /* DiscogsSearch.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A6B3568DB11C2044B3F8F65E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -185,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				61E62A9D98B5AB7EDDCE670B /* DiscogsSearch.framework */,
+				6DA81000BA5041643AD85B65 /* DiscogsSearchAPIEndToEndTests.xctest */,
 				EF818FE959488BBE0B3C8FBC /* DiscogsSearchApp.app */,
 				3207BA94D5160EC8128C7F41 /* DiscogsSearchTests.xctest */,
 			);
@@ -199,6 +231,14 @@
 				4154652602B4FE024BBA1531 /* URLProtocolStub.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		8BE426E365D2A981358D52BB /* DiscogsSearchAPIEndToEndTests */ = {
+			isa = PBXGroup;
+			children = (
+				C712DA151918F9B7AA1E011C /* DiscogsSearchAPIEndToEndTests.swift */,
+			);
+			path = DiscogsSearchAPIEndToEndTests;
 			sourceTree = "<group>";
 		};
 		9182665557614B1CAC4AA9DB /* Models */ = {
@@ -217,6 +257,7 @@
 			children = (
 				F02AE5B149B8DF7753DDDCB8 /* Configuration */,
 				EB61B36FFC240ADCAE2B4412 /* DiscogsSearch */,
+				8BE426E365D2A981358D52BB /* DiscogsSearchAPIEndToEndTests */,
 				664EC94B21B61C30659927F8 /* DiscogsSearchApp */,
 				3FFA268C4914C89FDE810100 /* DiscogsSearchTests */,
 				66C73CB8AAF546B68D22C42F /* Products */,
@@ -323,6 +364,26 @@
 			productReference = EF818FE959488BBE0B3C8FBC /* DiscogsSearchApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9F915C661D8C018930BFD0D2 /* DiscogsSearchAPIEndToEndTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEEC701AD354BE15BA51FE5B /* Build configuration list for PBXNativeTarget "DiscogsSearchAPIEndToEndTests" */;
+			buildPhases = (
+				18BE770312E7629CC960ECC7 /* Sources */,
+				194077923267C4AA0E20A908 /* Frameworks */,
+				C16FE04B1E9A67DE6AA59108 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				249DF6258500615FC337D63E /* PBXTargetDependency */,
+			);
+			name = DiscogsSearchAPIEndToEndTests;
+			packageProductDependencies = (
+			);
+			productName = DiscogsSearchAPIEndToEndTests;
+			productReference = 6DA81000BA5041643AD85B65 /* DiscogsSearchAPIEndToEndTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -352,6 +413,7 @@
 			projectRoot = "";
 			targets = (
 				09644AB9CD8B84DD150F2736 /* DiscogsSearch */,
+				9F915C661D8C018930BFD0D2 /* DiscogsSearchAPIEndToEndTests */,
 				6A47929C358C635D07C33175 /* DiscogsSearchApp */,
 				35C69C31DE9C2939D89F2CC1 /* DiscogsSearchTests */,
 			);
@@ -381,6 +443,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		18BE770312E7629CC960ECC7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C6861AAEAAB15A86BFC5A7F /* DiscogsSearchAPIEndToEndTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		487F090337D9532877556390 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -431,6 +501,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		249DF6258500615FC337D63E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 09644AB9CD8B84DD150F2736 /* DiscogsSearch */;
+			targetProxy = B0AAC4447C64773DA8156C92 /* PBXContainerItemProxy */;
+		};
 		338B8C3CA0BEC0F52577C85F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 09644AB9CD8B84DD150F2736 /* DiscogsSearch */;
@@ -633,6 +708,28 @@
 			};
 			name = Release;
 		};
+		88B6BC23EBF0DBF5C165A7E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.discogssearch.DiscogsSearchAPIEndToEndTests;
+				SDKROOT = macosx;
+				TEST_HOST = "";
+			};
+			name = Release;
+		};
 		9030997F78F1126849D8155A /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3AB9B0D65E732AFAA92720CC /* Release.xcconfig */;
@@ -683,6 +780,28 @@
 			};
 			name = Debug;
 		};
+		C39B4FB0CA84D6C2F0C09983 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.discogssearch.DiscogsSearchAPIEndToEndTests;
+				SDKROOT = macosx;
+				TEST_HOST = "";
+			};
+			name = Debug;
+		};
 		FB7714C5683BEAA93D8266D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B935D58AAD8838D93958A6CC /* Debug.xcconfig */;
@@ -729,6 +848,15 @@
 			buildConfigurations = (
 				B9044D040310EC1992C17476 /* Debug */,
 				3B1BC537B47FDA53FD2E6663 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BEEC701AD354BE15BA51FE5B /* Build configuration list for PBXNativeTarget "DiscogsSearchAPIEndToEndTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C39B4FB0CA84D6C2F0C09983 /* Debug */,
+				88B6BC23EBF0DBF5C165A7E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

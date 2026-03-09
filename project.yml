@@ -83,6 +83,27 @@ targets:
         CODE_SIGNING_REQUIRED: NO
         CODE_SIGNING_ALLOWED: NO
 
+  # ── API End-to-End Tests ─────────────────────────────────────────────────────
+  # Hits the real Discogs API. Requires DISCOGS_API_TOKEN env var.
+  # Runs on macOS — no simulator needed.
+  DiscogsSearchAPIEndToEndTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: DiscogsSearchAPIEndToEndTests
+    dependencies:
+      - target: DiscogsSearch
+    settings:
+      base:
+        TEST_HOST: ""
+        BUNDLE_LOADER: ""
+        ENABLE_TESTABILITY: YES
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
+
 schemes:
 
   # Run domain + infra tests on macOS (no simulator)
@@ -94,6 +115,19 @@ schemes:
     test:
       targets:
         - DiscogsSearchTests
+      randomExecutionOrder: true
+      coverageTargets:
+        - DiscogsSearch
+
+  # Run API end-to-end tests on macOS (requires DISCOGS_API_TOKEN env var)
+  DiscogsSearchAPIEndToEndTests:
+    build:
+      targets:
+        DiscogsSearch: all
+        DiscogsSearchAPIEndToEndTests: [test]
+    test:
+      targets:
+        - DiscogsSearchAPIEndToEndTests
       randomExecutionOrder: true
       coverageTargets:
         - DiscogsSearch
