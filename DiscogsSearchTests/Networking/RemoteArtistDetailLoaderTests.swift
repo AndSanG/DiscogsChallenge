@@ -22,6 +22,14 @@ struct RemoteArtistDetailLoaderTests {
         #expect(components?.path == "/artists/123")
     }
 
+
+    @Test func load_deliversConnectivityErrorOnClientError() async {
+        let (sut, spy) = makeSUT(); spy.stub(.failure(anyError()))
+        await #expect(throws: RemoteArtistDetailLoader.Error.connectivity) {
+            _ = try await sut.load(artistID: 1)
+        }
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
