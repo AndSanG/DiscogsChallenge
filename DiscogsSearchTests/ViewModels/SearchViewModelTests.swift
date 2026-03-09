@@ -84,6 +84,25 @@ struct SearchViewModelTests {
         #expect(sut.errorMessage != nil)
     }
 
+    @Test func load_clearsErrorBeforeReloading() async {
+        let (sut, spy) = makeSUT()
+
+        // First load → failure sets errorMessage
+        let task1 = Task { await sut.load(query: "any") }
+        await waitForTaskToStart()
+        spy.complete(with: .failure(anyError()))
+        await task1.value
+
+        // Second load → errorMessage must be nil before the new request resolves
+        let task2 = Task { await sut.load(query: "any") }
+        await waitForTaskToStart()
+
+        #expect(sut.errorMessage == nil)
+
+        spy.complete(with: .success(emptySearchPage()))
+        await task2.value
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: SearchViewModel, spy: ArtistSearchLoaderSpy) {

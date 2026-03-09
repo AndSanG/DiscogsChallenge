@@ -14,6 +14,7 @@ public final class SearchViewModel {
     }
 
     public func load(query: String) async {
+        errorMessage = nil
         isLoading = true
         defer { isLoading = false }
         do {
