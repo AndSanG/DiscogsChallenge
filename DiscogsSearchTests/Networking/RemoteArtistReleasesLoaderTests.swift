@@ -38,6 +38,17 @@ struct RemoteArtistReleasesLoaderTests {
         }
     }
 
+
+    @Test("delivers .invalidData on non-200 response", arguments: [199, 201, 400, 500])
+    func load_deliversInvalidDataErrorOnNon200Response(statusCode: Int) async {
+        let (sut, spy) = makeSUT()
+        spy.stub(.success((makeReleasesJSON(), makeResponse(statusCode: statusCode))))
+
+        await #expect(throws: RemoteArtistReleasesLoader.Error.invalidData) {
+            _ = try await sut.load(artistID: 1, page: 1)
+        }
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
