@@ -11,15 +11,29 @@ struct SearchViewModelTests {
         #expect(spy.loadCallCount == 0)
     }
 
+    // MARK: - load
+
     @Test func load_requestsArtistsFromLoader() async {
         let (sut, spy) = makeSUT()
 
         let task = Task { await sut.load(query: "Radiohead") }
-        await Task.yield()
+        await waitForTaskToStart()
 
         #expect(spy.loadCallCount == 1)
         #expect(spy.receivedQueries.first?.query == "Radiohead")
         #expect(spy.receivedQueries.first?.page == 1)
+
+        spy.complete(with: .success(emptySearchPage()))
+        await task.value
+    }
+
+    @Test func load_setsIsLoadingDuringRequest() async {
+        let (sut, spy) = makeSUT()
+
+        let task = Task { await sut.load(query: "Radiohead") }
+        await waitForTaskToStart()
+
+        #expect(sut.isLoading == true)
 
         spy.complete(with: .success(emptySearchPage()))
         await task.value

@@ -20,3 +20,9 @@ func makeSearchJSON(_ items: [[String: Any]] = [], page: Int = 1, pages: Int = 1
 func makeSearchItem(id: Int, name: String, thumb: String) -> [String: Any] {
     ["id": id, "title": name, "thumb": thumb, "type": "artist"]
 }
+
+/// Suspends briefly so an enqueued `@MainActor` Task has time to start and
+/// reach its first suspension point (e.g. an async spy call).
+func waitForTaskToStart() async {
+    try? await Task.sleep(for: .milliseconds(10))
+}
