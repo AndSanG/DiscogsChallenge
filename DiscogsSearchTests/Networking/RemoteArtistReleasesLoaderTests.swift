@@ -59,6 +59,17 @@ struct RemoteArtistReleasesLoaderTests {
         }
     }
 
+
+    @Test func load_deliversNoReleasesOn200WithEmptyList() async throws {
+        let (sut, spy) = makeSUT()
+        spy.stub(.success((makeReleasesJSON([]), makeResponse(statusCode: 200))))
+
+        let page = try await sut.load(artistID: 1, page: 1)
+
+        #expect(page.items.isEmpty)
+        #expect(page.hasNextPage == false)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
