@@ -6,8 +6,7 @@ import Testing
 struct RemoteArtistSearchLoaderTests {
 
     @Test func init_doesNotRequestData() {
-        let (_, spy) = makeSUT()
-        #expect(spy.requests.isEmpty)
+        let (_, spy) = makeSUT(); #expect(spy.requests.isEmpty)
     }
 
     @Test func load_requestsDataFromURL() async throws {
@@ -18,8 +17,7 @@ struct RemoteArtistSearchLoaderTests {
         #expect(spy.requests.count == 1)
         let url = try #require(spy.requests.first?.url)
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        #expect(components?.scheme == "https")
-        #expect(components?.host == "api.discogs.com")
+        #expect(components?.scheme == "https"); #expect(components?.host == "api.discogs.com")
         #expect(components?.path == "/database/search")
         #expect(components?.queryItems?.contains(URLQueryItem(name: "q", value: "Metallica")) == true)
         #expect(components?.queryItems?.contains(URLQueryItem(name: "type", value: "artist")) == true)
@@ -37,9 +35,17 @@ struct RemoteArtistSearchLoaderTests {
     }
 
     @Test func load_deliversConnectivityErrorOnClientError() async {
-        let (sut, spy) = makeSUT()
-        spy.stub(.failure(anyError()))
+        let (sut, spy) = makeSUT(); spy.stub(.failure(anyError()))
         await #expect(throws: RemoteArtistSearchLoader.Error.connectivity) {
+            _ = try await sut.load(query: "Metallica", page: 1)
+        }
+    }
+
+    @Test("delivers .invalidData on non-200 response", arguments: [199, 201, 300, 400, 500])
+    func load_deliversInvalidDataErrorOnNon200Response(statusCode: Int) async {
+        let (sut, spy) = makeSUT()
+        spy.stub(.success((makeSearchJSON(), makeResponse(statusCode: statusCode))))
+        await #expect(throws: RemoteArtistSearchLoader.Error.invalidData) {
             _ = try await sut.load(query: "Metallica", page: 1)
         }
     }
