@@ -54,6 +54,15 @@ struct RemoteArtistSearchLoaderTests {
         }
     }
 
+
+    @Test func load_deliversNoItemsOn200ResponseWithEmptyJSONList() async throws {
+        let (sut, spy) = makeSUT()
+        spy.stub(.success((makeSearchJSON([]), makeResponse(statusCode: 200))))
+        let page = try await sut.load(query: "Metallica", page: 1)
+        #expect(page.items.isEmpty)
+        #expect(page.hasNextPage == false)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
