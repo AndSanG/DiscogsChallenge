@@ -7,6 +7,7 @@ public final class SearchViewModel {
 
     public private(set) var items: [ArtistSearchResult] = []
     public private(set) var isLoading = false
+    public private(set) var errorMessage: String? = nil
 
     public init(loader: any ArtistSearchLoader) {
         self.loader = loader
@@ -15,8 +16,11 @@ public final class SearchViewModel {
     public func load(query: String) async {
         isLoading = true
         defer { isLoading = false }
-        if let page = try? await loader.load(query: query, page: 1) {
+        do {
+            let page = try await loader.load(query: query, page: 1)
             items = page.items
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 }

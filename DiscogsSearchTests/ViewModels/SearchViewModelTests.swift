@@ -73,6 +73,17 @@ struct SearchViewModelTests {
         #expect(sut.items == expected)
     }
 
+    @Test func load_setsErrorMessageOnFailure() async {
+        let (sut, spy) = makeSUT()
+
+        let task = Task { await sut.load(query: "any") }
+        await waitForTaskToStart()
+        spy.complete(with: .failure(anyError()))
+        await task.value
+
+        #expect(sut.errorMessage != nil)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: SearchViewModel, spy: ArtistSearchLoaderSpy) {
