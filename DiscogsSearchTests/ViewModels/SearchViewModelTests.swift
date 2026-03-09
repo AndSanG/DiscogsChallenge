@@ -103,6 +103,20 @@ struct SearchViewModelTests {
         await task2.value
     }
 
+    @Test func load_doesNotDeliverResultAfterSUTDeallocated() async {
+        let spy = ArtistSearchLoaderSpy()
+        var sut: SearchViewModel? = SearchViewModel(loader: spy)
+        weak var weakSUT = sut
+
+        let task = Task { await sut!.load(query: "any") }
+        await waitForTaskToStart()
+        sut = nil
+        spy.complete(with: .success(emptySearchPage()))
+        await task.value
+
+        #expect(weakSUT == nil, "Expected SearchViewModel to be deallocated — potential memory leak")
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: SearchViewModel, spy: ArtistSearchLoaderSpy) {
