@@ -60,6 +60,31 @@ struct RemoteArtistDetailLoaderTests {
         #expect(artist == expectedArtist)
     }
 
+
+    @Test func load_deliversArtistWithMembersOn200WithValidJSON() async throws {
+        let (sut, spy) = makeSUT()
+        let expectedArtist = Artist(
+            id: 1, name: "Metallica", profile: "Heavy metal band",
+            imageURL: URL(string: "https://img.discogs.com/artist.jpg"),
+            members: [
+                Member(id: 10, name: "James Hetfield", isActive: true),
+                Member(id: 20, name: "Lars Ulrich", isActive: false)
+            ]
+        )
+        spy.stub(.success((makeArtistJSON(
+            id: 1, name: "Metallica", profile: "Heavy metal band",
+            imageURI: "https://img.discogs.com/artist.jpg",
+            members: [
+                ["id": 10, "name": "James Hetfield", "active": true],
+                ["id": 20, "name": "Lars Ulrich", "active": false]
+            ]
+        ), makeResponse(statusCode: 200))))
+
+        let artist = try await sut.load(artistID: 1)
+
+        #expect(artist == expectedArtist)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
