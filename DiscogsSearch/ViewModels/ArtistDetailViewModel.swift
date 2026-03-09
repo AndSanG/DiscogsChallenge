@@ -6,8 +6,23 @@ public final class ArtistDetailViewModel {
     private let artistID: Int
     private let loader: any ArtistDetailLoader
 
+    public private(set) var artist: Artist? = nil
+    public private(set) var isLoading = false
+    public private(set) var errorMessage: String? = nil
+
     public init(artistID: Int, loader: any ArtistDetailLoader) {
         self.artistID = artistID
         self.loader = loader
+    }
+
+    public func load() async {
+        errorMessage = nil
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            artist = try await loader.load(artistID: artistID)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 }
