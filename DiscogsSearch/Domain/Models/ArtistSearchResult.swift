@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ArtistSearchResult: Sendable, Equatable {
+public struct ArtistSearchResult: Sendable, Equatable, Hashable {
     public let id: Int
     public let name: String
     public let thumbnailURL: URL?

@@ -31,6 +31,7 @@ targets:
         # Build for both macOS (domain tests, no simulator) and iOS (app target)
         SUPPORTED_PLATFORMS: "macosx iphonesimulator iphoneos"
         ALLOW_TARGET_PLATFORM_SPECIALIZATION: YES
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
         GENERATE_INFOPLIST_FILE: YES
     preBuildScripts:
       - name: SwiftLint
@@ -60,6 +61,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.discogssearch.app
         PRODUCT_NAME: DiscogsSearch
+        PRODUCT_MODULE_NAME: DiscogsSearchApp
         INFOPLIST_FILE: DiscogsSearchApp/Info.plist
         CODE_SIGN_STYLE: Automatic
 
