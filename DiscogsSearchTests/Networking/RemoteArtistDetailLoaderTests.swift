@@ -49,6 +49,17 @@ struct RemoteArtistDetailLoaderTests {
         }
     }
 
+
+    @Test func load_deliversArtistWithNoMembersOn200WithValidJSON() async throws {
+        let (sut, spy) = makeSUT()
+        let expectedArtist = Artist(id: 1, name: "Any Artist", profile: "", imageURL: nil, members: [])
+        spy.stub(.success((makeArtistJSON(), makeResponse(statusCode: 200))))
+
+        let artist = try await sut.load(artistID: 1)
+
+        #expect(artist == expectedArtist)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
