@@ -34,6 +34,17 @@ struct ArtistDetailViewModelTests {
         await task.value
     }
 
+    @Test func load_clearsIsLoadingOnSuccess() async {
+        let (sut, spy) = makeSUT()
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(anyArtist()))
+        await task.value
+
+        #expect(sut.isLoading == false)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ArtistDetailViewModel, spy: ArtistDetailLoaderSpy) {
