@@ -104,6 +104,22 @@ targets:
         CODE_SIGNING_REQUIRED: NO
         CODE_SIGNING_ALLOWED: NO
 
+  # ── Prototype App ────────────────────────────────────────────────────────────
+  # Throw-away visual sandbox with hardcoded data. No networking, no domain
+  # framework dependency. Purpose: iterate on cell layouts and animations fast.
+  DiscogsSearchPrototype:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: DiscogsSearchPrototype
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.discogssearch.prototype
+        PRODUCT_NAME: DiscogsSearchPrototype
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic
+
 schemes:
 
   # Run domain + infra tests on macOS (no simulator)
@@ -141,3 +157,11 @@ schemes:
       config: Debug
     archive:
       config: Release
+
+  # Run the prototype on simulator (visual sandbox only — not in CI)
+  DiscogsSearchPrototype:
+    build:
+      targets:
+        DiscogsSearchPrototype: all
+    run:
+      config: Debug
