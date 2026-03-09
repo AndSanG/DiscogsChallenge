@@ -153,6 +153,25 @@ struct SearchViewModelTests {
         #expect(spy.loadCallCount == 1)
     }
 
+    // MARK: - onSearchTextChanged (debounce)
+
+    @Test func onSearchTextChanged_debouncesConcurrentSearches() async {
+        let (sut, spy) = makeSUT()
+
+        sut.onSearchTextChanged("r")
+        sut.onSearchTextChanged("ra")
+        sut.onSearchTextChanged("rad")
+
+        // Wait past the 300 ms debounce; the first two tasks are cancelled
+        try? await Task.sleep(for: .milliseconds(400))
+
+        #expect(spy.loadCallCount == 1)
+        #expect(spy.receivedQueries.first?.query == "rad")
+
+        spy.complete(with: .success(emptySearchPage()))
+        await Task.yield()
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: SearchViewModel, spy: ArtistSearchLoaderSpy) {

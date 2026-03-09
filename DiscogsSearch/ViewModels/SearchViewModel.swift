@@ -12,6 +12,7 @@ public final class SearchViewModel {
 
     @ObservationIgnored private var currentQuery = ""
     @ObservationIgnored private var currentPage = 1
+    @ObservationIgnored private var searchTask: Task<Void, Never>?
 
     public init(loader: any ArtistSearchLoader) {
         self.loader = loader
@@ -29,6 +30,15 @@ public final class SearchViewModel {
             hasNextPage = page.hasNextPage
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    public func onSearchTextChanged(_ text: String) {
+        searchTask?.cancel()
+        searchTask = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            await self?.load(query: text)
         }
     }
 
