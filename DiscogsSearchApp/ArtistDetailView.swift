@@ -1,6 +1,11 @@
 import SwiftUI
 import DiscogsSearch
 
+/// Navigation value used to push ReleasesView from the composition root.
+struct ReleasesTarget: Hashable {
+    let artistID: Int
+}
+
 struct ArtistDetailView: View {
     var viewModel: ArtistDetailViewModel
 
@@ -61,6 +66,13 @@ struct ArtistDetailView: View {
                             }
                         }
                     }
+                }
+            }
+
+            // Releases navigation — value handled by the Composition Root
+            Section {
+                NavigationLink(value: ReleasesTarget(artistID: artist.id)) {
+                    Label("View Releases", systemImage: "music.note.list")
                 }
             }
         }
