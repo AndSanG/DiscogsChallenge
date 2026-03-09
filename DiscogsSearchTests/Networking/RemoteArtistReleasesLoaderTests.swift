@@ -28,6 +28,16 @@ struct RemoteArtistReleasesLoaderTests {
         #expect(components?.queryItems?.contains(URLQueryItem(name: "sort_order", value: "desc")) == true)
     }
 
+
+    @Test func load_deliversConnectivityErrorOnClientError() async {
+        let (sut, spy) = makeSUT()
+        spy.stub(.failure(anyError()))
+
+        await #expect(throws: RemoteArtistReleasesLoader.Error.connectivity) {
+            _ = try await sut.load(artistID: 1, page: 1)
+        }
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
