@@ -5,6 +5,7 @@ import Observation
 public final class SearchViewModel {
     private let loader: any ArtistSearchLoader
 
+    public private(set) var items: [ArtistSearchResult] = []
     public private(set) var isLoading = false
 
     public init(loader: any ArtistSearchLoader) {
@@ -14,6 +15,8 @@ public final class SearchViewModel {
     public func load(query: String) async {
         isLoading = true
         defer { isLoading = false }
-        _ = try? await loader.load(query: query, page: 1)
+        if let page = try? await loader.load(query: query, page: 1) {
+            items = page.items
+        }
     }
 }

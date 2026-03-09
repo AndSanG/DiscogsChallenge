@@ -61,6 +61,18 @@ struct SearchViewModelTests {
         #expect(sut.isLoading == false)
     }
 
+    @Test func load_deliversArtistsOnSuccess() async {
+        let (sut, spy) = makeSUT()
+        let expected = [anySearchResult(id: 1, name: "Radiohead"), anySearchResult(id: 2, name: "Daft Punk")]
+
+        let task = Task { await sut.load(query: "any") }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeSearchResults(expected)))
+        await task.value
+
+        #expect(sut.items == expected)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: SearchViewModel, spy: ArtistSearchLoaderSpy) {
