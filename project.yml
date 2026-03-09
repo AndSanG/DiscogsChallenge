@@ -1,0 +1,109 @@
+name: DiscogsSearch
+options:
+  bundleIdPrefix: com.discogssearch
+  createIntermediateGroups: true
+  groupSortPosition: top
+  defaultConfig: Debug
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+
+targets:
+
+  # ── macOS Framework ─────────────────────────────────────────────────────────
+  # Domain models, protocols, remote loaders, mappers, and ViewModels.
+  # No UIKit / SwiftUI imports allowed here.
+  # Tests run on macOS — no simulator required.
+  DiscogsSearch:
+    type: framework
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: DiscogsSearch
+    settings:
+      base:
+        ENABLE_TESTABILITY: YES
+        APPLICATION_EXTENSION_API_ONLY: NO
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
+        # Build for both macOS (domain tests, no simulator) and iOS (app target)
+        SUPPORTED_PLATFORMS: "macosx iphonesimulator iphoneos"
+        ALLOW_TARGET_PLATFORM_SPECIALIZATION: YES
+        GENERATE_INFOPLIST_FILE: YES
+    preBuildScripts:
+      - name: SwiftLint
+        script: |
+          if which swiftlint > /dev/null; then
+            swiftlint lint --config "${SRCROOT}/.swiftlint.yml" --quiet
+          else
+            echo "warning: SwiftLint not installed. Run: brew install swiftlint"
+          fi
+        basedOnDependencyAnalysis: false
+
+  # ── iOS App ──────────────────────────────────────────────────────────────────
+  # SwiftUI views and the Composition Root only.
+  # Reads DISCOGS_API_TOKEN from Secrets.xcconfig via Info.plist.
+  DiscogsSearchApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: DiscogsSearchApp
+    dependencies:
+      - target: DiscogsSearch
+    configFiles:
+      Debug: Configuration/Debug.xcconfig
+      Release: Configuration/Release.xcconfig
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.discogssearch.app
+        PRODUCT_NAME: DiscogsSearch
+        INFOPLIST_FILE: DiscogsSearchApp/Info.plist
+        CODE_SIGN_STYLE: Automatic
+
+  # ── macOS Unit Test Bundle ───────────────────────────────────────────────────
+  # Tests the macOS framework only. Runs natively on Mac — no simulator needed.
+  DiscogsSearchTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: DiscogsSearchTests
+    dependencies:
+      - target: DiscogsSearch
+    settings:
+      base:
+        TEST_HOST: ""
+        BUNDLE_LOADER: ""
+        ENABLE_TESTABILITY: YES
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
+
+schemes:
+
+  # Run domain + infra tests on macOS (no simulator)
+  DiscogsSearchTests:
+    build:
+      targets:
+        DiscogsSearch: all
+        DiscogsSearchTests: [test]
+    test:
+      targets:
+        - DiscogsSearchTests
+      randomExecutionOrder: true
+      coverageTargets:
+        - DiscogsSearch
+
+  # Run the iOS app on simulator
+  DiscogsSearch:
+    build:
+      targets:
+        DiscogsSearchApp: all
+    run:
+      config: Debug
+    archive:
+      config: Release

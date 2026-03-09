@@ -1,0 +1,3 @@
+// Release configuration.
+// Secrets.xcconfig must exist alongside this file — see Secrets.xcconfig.template.
+#include "Secrets.xcconfig"

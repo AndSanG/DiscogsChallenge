@@ -1,0 +1,22 @@
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcworkspace/xcshareddata/
+DerivedData/
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+*.resolved
+
+# ⚠️  NEVER commit — contains Discogs API token
+Configuration/Secrets.xcconfig
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
