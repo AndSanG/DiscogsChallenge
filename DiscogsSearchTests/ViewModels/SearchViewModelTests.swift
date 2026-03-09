@@ -117,6 +117,42 @@ struct SearchViewModelTests {
         #expect(weakSUT == nil, "Expected SearchViewModel to be deallocated — potential memory leak")
     }
 
+    // MARK: - loadNextPage
+
+    @Test func loadNextPage_appendsArtistsOnSuccess() async {
+        let (sut, spy) = makeSUT()
+        let firstPage = [anySearchResult(id: 1, name: "Artist A")]
+        let secondPage = [anySearchResult(id: 2, name: "Artist B")]
+
+        // Load page 1
+        let task1 = Task { await sut.load(query: "any") }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeSearchResults(firstPage, hasNextPage: true)))
+        await task1.value
+
+        // Load page 2
+        let task2 = Task { await sut.loadNextPage() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeSearchResults(secondPage, hasNextPage: false)))
+        await task2.value
+
+        #expect(sut.items == firstPage + secondPage)
+    }
+
+    @Test func loadNextPage_doesNothingWhenOnLastPage() async {
+        let (sut, spy) = makeSUT()
+
+        // Load page 1 with hasNextPage = false
+        let task1 = Task { await sut.load(query: "any") }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeSearchResults([], hasNextPage: false)))
+        await task1.value
+
+        await sut.loadNextPage()
+
+        #expect(spy.loadCallCount == 1)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: SearchViewModel, spy: ArtistSearchLoaderSpy) {
