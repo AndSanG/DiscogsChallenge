@@ -63,6 +63,20 @@ struct RemoteArtistSearchLoaderTests {
         #expect(page.hasNextPage == false)
     }
 
+
+    @Test func load_deliversItemsOn200ResponseWithJSONItems() async throws {
+        let (sut, spy) = makeSUT()
+        let item1 = makeSearchItem(id: 1, name: "Metallica", thumb: "https://img.discogs.com/1.jpg")
+        let item2 = makeSearchItem(id: 2, name: "Megadeth",  thumb: "https://img.discogs.com/2.jpg")
+        spy.stub(.success((makeSearchJSON([item1, item2], page: 1, pages: 3), makeResponse(statusCode: 200))))
+        let page = try await sut.load(query: "Metal", page: 1)
+        #expect(page.items == [
+            ArtistSearchResult(id: 1, name: "Metallica", thumbnailURL: URL(string: "https://img.discogs.com/1.jpg")),
+            ArtistSearchResult(id: 2, name: "Megadeth",  thumbnailURL: URL(string: "https://img.discogs.com/2.jpg"))
+        ])
+        #expect(page.hasNextPage == true)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
