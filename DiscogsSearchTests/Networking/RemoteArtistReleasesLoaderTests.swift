@@ -10,6 +10,24 @@ struct RemoteArtistReleasesLoaderTests {
         #expect(spy.requests.isEmpty)
     }
 
+
+    @Test func load_requestsCorrectURL() async throws {
+        let baseURL = URL(string: "https://api.discogs.com")!
+        let (sut, spy) = makeSUT(baseURL: baseURL)
+        spy.stub(.success((makeReleasesJSON(), makeResponse(statusCode: 200))))
+
+        _ = try await sut.load(artistID: 456, page: 2)
+
+        #expect(spy.requests.count == 1)
+        let url = try #require(spy.requests.first?.url)
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        #expect(components?.path == "/artists/456/releases")
+        #expect(components?.queryItems?.contains(URLQueryItem(name: "page", value: "2")) == true)
+        #expect(components?.queryItems?.contains(URLQueryItem(name: "per_page", value: "30")) == true)
+        #expect(components?.queryItems?.contains(URLQueryItem(name: "sort", value: "year")) == true)
+        #expect(components?.queryItems?.contains(URLQueryItem(name: "sort_order", value: "desc")) == true)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
