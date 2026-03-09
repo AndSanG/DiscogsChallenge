@@ -45,12 +45,14 @@ The project uses a strict layered architecture where each module depends only on
 
 ```
 DiscogsSearchApp (iOS)       ← Composition Root only; wires everything together
-       │
+       │                         SearchView, ArtistDetailView, ReleasesView (SwiftUI)
+       │                         AuthenticatedHTTPClient (app-target decorator)
        ▼
 DiscogsSearch (macOS framework)
   ├── Domain
   │    ├── Models:   ArtistSearchResult, Artist, Member, Release, Page<T>
-  │    └── Loaders:  ArtistSearchLoader, ArtistDetailLoader, ArtistReleasesLoader (protocols)
+  │    ├── Loaders:  ArtistSearchLoader, ArtistDetailLoader, ArtistReleasesLoader (protocols)
+  │    └── ViewModels: SearchViewModel, ArtistDetailViewModel, ReleasesViewModel (@Observable)
   └── Networking
        ├── HTTPClient (protocol)
        ├── URLSessionHTTPClient (concrete)
@@ -59,6 +61,13 @@ DiscogsSearch (macOS framework)
        ├── RemoteArtistReleasesLoader
        └── Mappers: ArtistSearchMapper, ArtistDetailMapper, ArtistReleasesMapper
 ```
+
+**Composition Root** (`DiscogsSearchApp.swift`) is the only place that knows about concrete types. It:
+1. Reads the API token from `Info.plist` (injected at build time from `Secrets.xcconfig`)
+2. Creates a single `URLSessionHTTPClient` wrapped by `AuthenticatedHTTPClient`
+3. Injects the shared client into all three `Remote*Loader` instances
+4. Creates `SearchViewModel` and passes it to `SearchView` via `@State`
+5. Registers `navigationDestination` handlers that create `ArtistDetailViewModel` / `ReleasesViewModel` on demand — the views never know where the data comes from
 
 **Why a macOS framework for domain logic?**
 Domain and networking layers have no platform-specific dependencies. Targeting macOS lets the entire test suite run natively in seconds without launching a simulator — the fastest possible feedback loop.
@@ -83,28 +92,36 @@ This means every unit test runs in complete isolation with no network calls.
 
 ## What was tested and why
 
-**Phase 2 — Remote API layer (21 tests)**
+**61 tests total — all run on macOS, no simulator required.**
+
+**Phase 2 — Remote API layer (29 tests)**
 - `RemoteArtistSearchLoader` (9 tests): init side-effects, URL construction, connectivity error, non-200 responses, invalid JSON, empty list, items mapping, memory safety
 - `RemoteArtistDetailLoader` (8 tests): same contract for artist detail endpoint
 - `RemoteArtistReleasesLoader` (9 tests): same contract for releases endpoint
 - `URLSessionHTTPClient` (3 tests): correct URL/method, error delivery, data+response delivery — driven with `URLProtocol` stubs, no URLSession subclassing
 
-All tests use **Swift Testing** (`import Testing`) and run on macOS with no simulator.
+**Phase 5 — ViewModel layer (32 tests)**
+- `SearchViewModel` (12 tests): init side-effects, load triggers loader, `isLoading` during/after request, items delivered on success, error message on failure, error cleared on reload, memory safety, pagination append, no-op on last page, search debounce
+- `ArtistDetailViewModel` (9 tests): same loading contract for artist detail
+- `ReleasesViewModel` (11 tests): same loading contract + pagination for releases
+
+All tests use **Swift Testing** (`import Testing`) with continuation-based spies for precise async timing control.
 
 ---
 
 ## Observability and security choices
 
-- **No token in source**: The Discogs API token lives in `Configuration/Secrets.xcconfig`, which is gitignored. A `.template` file is committed instead.
-- **Ephemeral session in E2E tests**: Prevents stale cache from masking real API behaviour.
+- **No token in source**: The Discogs API token lives in `Configuration/Secrets.xcconfig`, which is gitignored. A `.template` file is committed instead. At runtime the app reads the token from `Info.plist`, where it is injected via a build setting.
+- **`AuthenticatedHTTPClient` decorator**: The token is added as an `Authorization: Discogs token=…` header in a single place — the app-target decorator — and is invisible to all loaders and ViewModels.
+- **Ephemeral `URLSession`**: Used in both the production app and E2E tests to prevent stale cache from masking real API responses.
 - **Thread Sanitizer**: Enabled on CI for the domain test scheme.
 
 ---
 
 ## What I would improve or add next
 
-- Phase 3: Local cache layer with CoreData (offline support, 7-day max-age policy)
-- Phase 4: UI prototype with hardcoded data to nail the design
-- Phase 5: Production SwiftUI views + `@Observable` ViewModels, tested in isolation
-- Phase 6: Composition Root wiring all layers together in the app target
-- CI: add `DISCOGS_API_TOKEN` as a GitHub Actions secret to enable E2E tests on every push
+- **Offline support**: A local cache layer (CoreData store + `LocalArtistSearchLoader`) with a 7-day max-age policy and a `FeedLoaderWithFallbackComposite` that tries the cache first and falls back to the network
+- **Image caching**: An `NSCache`-backed `CachedAsyncImage` wrapper to avoid re-fetching thumbnails on scroll
+- **Pagination in search**: The search results list currently loads one page; adding infinite scroll (mirroring the releases list) would use the existing `hasNextPage` / `loadNextPage()` ViewModel API
+- **E2E tests on CI**: Add `DISCOGS_API_TOKEN` as a GitHub Actions secret so the `DiscogsSearchAPIEndToEndTests` scheme runs on every push
+- **Accessibility**: VoiceOver labels on artist thumbnails and release artwork
