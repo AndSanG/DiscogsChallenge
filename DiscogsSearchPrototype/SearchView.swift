@@ -28,5 +28,8 @@ struct SearchView: View {
         .navigationDestination(for: PrototypeArtist.self) { artist in
             ArtistDetailView(artist: artist)
         }
+        .refreshable {
+            try? await Task.sleep(for: .seconds(1.5))
+        }
     }
 }

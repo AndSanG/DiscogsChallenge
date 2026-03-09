@@ -3,15 +3,34 @@ import SwiftUI
 struct ArtistDetailView: View {
     let artist: PrototypeArtist
 
+    @State private var isHeroLoaded = false
+
     var body: some View {
         List {
-            // Hero image placeholder
+            // Hero image
             Section {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemGray5))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 220)
-                    .listRowInsets(EdgeInsets())
+                ZStack {
+                    if isHeroLoaded {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(avatarColor(for: artist.name))
+                            .overlay(
+                                Text(artist.name.prefix(1))
+                                    .font(.system(size: 72, weight: .bold))
+                                    .foregroundStyle(.white.opacity(0.8))
+                            )
+                            .transition(.opacity)
+                    } else {
+                        ShimmerView(cornerRadius: 12)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 220)
+                .animation(.easeIn(duration: 0.4), value: isHeroLoaded)
+                .listRowInsets(EdgeInsets())
+                .task {
+                    try? await Task.sleep(for: .milliseconds(800))
+                    isHeroLoaded = true
+                }
             }
 
             // Profile
@@ -50,5 +69,10 @@ struct ArtistDetailView: View {
         }
         .navigationTitle(artist.name)
         .navigationBarTitleDisplayMode(.large)
+    }
+
+    private func avatarColor(for name: String) -> Color {
+        let palette: [Color] = [.blue, .purple, .orange, .green, .pink, .teal, .indigo, .cyan]
+        return palette[abs(name.hashValue) % palette.count]
     }
 }

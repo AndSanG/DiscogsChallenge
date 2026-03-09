@@ -24,6 +24,7 @@
 		5114B3423D09DB41D834D8BB /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD82DF54E10C423FAFD2B883 /* TestHelpers.swift */; };
 		51D1367E939CA143EB47FB01 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98F32D1D938857A4B95AECD /* HTTPClient.swift */; };
 		5678F9B7600A0BFD349B73B1 /* DiscogsSearchPrototypeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BA8EFE4054A6E17CCFD358 /* DiscogsSearchPrototypeApp.swift */; };
+		599AFD43A42ADE4EB67D8AB9 /* ShimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D604E1DDC14F22CA75392 /* ShimmerView.swift */; };
 		5F9CC635A80B57A391CDD5A1 /* DiscogsSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CDBFCED10916709D2EB188 /* DiscogsSearchTests.swift */; };
 		61A54F9C83A8203E3A6C17CA /* RemoteArtistDetailLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F62C40A4FF4410DDE5BF86 /* RemoteArtistDetailLoaderTests.swift */; };
 		6DB7C2DB7BB48872E3C0EE30 /* ArtistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A8FA1150F497D5B2BC1B08 /* ArtistDetailView.swift */; };
@@ -137,6 +138,7 @@
 		9A1014E4C38D7856E60BFD57 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A792F95E1E93043605F224D5 /* RemoteArtistReleasesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteArtistReleasesLoaderTests.swift; sourceTree = "<group>"; };
 		AB04845EECC8C41ABFF08F13 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
+		AE4D604E1DDC14F22CA75392 /* ShimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerView.swift; sourceTree = "<group>"; };
 		B1F00326040D48C8BC9A39DC /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		B935D58AAD8838D93958A6CC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		BA07D29DECC3C74AF7087D74 /* ArtistSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchLoader.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				5D4E7E6F1DB48F1006F84024 /* ReleaseRow.swift */,
 				EED9BF61BC045E33F1E7FCB8 /* ReleasesView.swift */,
 				E992738874FC356241493C4F /* SearchView.swift */,
+				AE4D604E1DDC14F22CA75392 /* ShimmerView.swift */,
 			);
 			path = DiscogsSearchPrototype;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 				96B14C3FDFFA2EAC6B42AFAC /* ReleaseRow.swift in Sources */,
 				11617DBEBCAD430BFBD968D0 /* ReleasesView.swift in Sources */,
 				A4D33931657E8AA8C0FE256A /* SearchView.swift in Sources */,
+				599AFD43A42ADE4EB67D8AB9 /* ShimmerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
