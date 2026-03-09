@@ -95,6 +95,16 @@ struct RemoteArtistReleasesLoaderTests {
         #expect(page.hasNextPage == true)
     }
 
+
+    @Test func load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
+        var sut: RemoteArtistReleasesLoader? = RemoteArtistReleasesLoader(
+            client: HTTPClientSpy(), baseURL: anyURL()
+        )
+        weak var weakSUT = sut
+        sut = nil
+        #expect(weakSUT == nil, "Expected loader to be deallocated — potential retain cycle")
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
