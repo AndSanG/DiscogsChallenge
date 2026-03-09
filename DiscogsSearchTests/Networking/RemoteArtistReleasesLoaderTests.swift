@@ -70,6 +70,31 @@ struct RemoteArtistReleasesLoaderTests {
         #expect(page.hasNextPage == false)
     }
 
+
+    @Test func load_deliversReleasesOn200WithValidJSON() async throws {
+        let (sut, spy) = makeSUT()
+        let release1 = makeReleaseItem(id: 1, title: "Master of Puppets", year: 1986,
+                                       genres: ["Rock"], labels: ["Elektra"],
+                                       thumb: "https://img.discogs.com/1.jpg", type: "master")
+        let release2 = makeReleaseItem(id: 2, title: "...And Justice for All", year: 1988,
+                                       genres: ["Metal"], labels: ["Elektra"],
+                                       thumb: "https://img.discogs.com/2.jpg", type: "master")
+        spy.stub(.success((makeReleasesJSON([release1, release2], page: 1, pages: 3),
+                           makeResponse(statusCode: 200))))
+
+        let page = try await sut.load(artistID: 1, page: 1)
+
+        #expect(page.items == [
+            Release(id: 1, title: "Master of Puppets", year: 1986,
+                    genres: ["Rock"], labels: ["Elektra"],
+                    thumbnailURL: URL(string: "https://img.discogs.com/1.jpg"), type: "master"),
+            Release(id: 2, title: "...And Justice for All", year: 1988,
+                    genres: ["Metal"], labels: ["Elektra"],
+                    thumbnailURL: URL(string: "https://img.discogs.com/2.jpg"), type: "master")
+        ])
+        #expect(page.hasNextPage == true)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
