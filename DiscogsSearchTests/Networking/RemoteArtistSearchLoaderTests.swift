@@ -36,6 +36,14 @@ struct RemoteArtistSearchLoaderTests {
         #expect(spy.requests.count == 2)
     }
 
+    @Test func load_deliversConnectivityErrorOnClientError() async {
+        let (sut, spy) = makeSUT()
+        spy.stub(.failure(anyError()))
+        await #expect(throws: RemoteArtistSearchLoader.Error.connectivity) {
+            _ = try await sut.load(query: "Metallica", page: 1)
+        }
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
