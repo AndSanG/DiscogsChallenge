@@ -8,4 +8,8 @@ public final class SearchViewModel {
     public init(loader: any ArtistSearchLoader) {
         self.loader = loader
     }
+
+    public func load(query: String) async {
+        _ = try? await loader.load(query: query, page: 1)
+    }
 }
