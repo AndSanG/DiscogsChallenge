@@ -115,6 +115,8 @@ All tests use **Swift Testing** (`import Testing`) with continuation-based spies
 - **`AuthenticatedHTTPClient` decorator**: The token is added as an `Authorization: Discogs token=…` header in a single place — the app-target decorator — and is invisible to all loaders and ViewModels.
 - **Ephemeral `URLSession`**: Used in both the production app and E2E tests to prevent stale cache from masking real API responses.
 - **Thread Sanitizer**: Enabled on CI for the domain test scheme.
+- **User-friendly error messages**: All `Remote*Loader.Error` enums conform to `LocalizedError`, so users see "Check your internet connection and try again." rather than raw Swift enum descriptions like `error 0`.
+- **Cancellation safety**: `URLSession` throws `URLError(.cancelled)` — not `CancellationError` — when a `Task` is cancelled. All loaders re-map it to `CancellationError`; ViewModels silently discard it. Rapid typing during search never produces false connectivity alerts.
 
 ---
 
