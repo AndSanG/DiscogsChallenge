@@ -27,7 +27,9 @@ public final class RemoteArtistSearchLoader: ArtistSearchLoader, @unchecked Send
     }
 
     private func makeSearchURL(query: String, page: Int) -> URL {
-        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
+        guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
+            preconditionFailure("Invalid base URL: \(baseURL)")
+        }
         components.path = "/database/search"
         components.queryItems = [
             URLQueryItem(name: "q", value: query),
@@ -35,6 +37,9 @@ public final class RemoteArtistSearchLoader: ArtistSearchLoader, @unchecked Send
             URLQueryItem(name: "page", value: "\(page)"),
             URLQueryItem(name: "per_page", value: "30")
         ]
-        return components.url!
+        guard let url = components.url else {
+            preconditionFailure("Unable to construct search URL from components")
+        }
+        return url
     }
 }

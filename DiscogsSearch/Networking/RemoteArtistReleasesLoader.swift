@@ -27,7 +27,9 @@ public final class RemoteArtistReleasesLoader: ArtistReleasesLoader, @unchecked 
     }
 
     private func makeReleasesURL(artistID: Int, page: Int) -> URL {
-        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
+        guard var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
+            preconditionFailure("Invalid base URL: \(baseURL)")
+        }
         components.path = "/artists/\(artistID)/releases"
         components.queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
@@ -35,6 +37,9 @@ public final class RemoteArtistReleasesLoader: ArtistReleasesLoader, @unchecked 
             URLQueryItem(name: "sort", value: "year"),
             URLQueryItem(name: "sort_order", value: "desc")
         ]
-        return components.url!
+        guard let url = components.url else {
+            preconditionFailure("Unable to construct releases URL from components")
+        }
+        return url
     }
 }
