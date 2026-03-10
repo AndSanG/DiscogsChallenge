@@ -35,6 +35,17 @@ struct ReleasesViewModelTests {
         await task.value
     }
 
+    @Test func load_clearsIsLoadingOnSuccess() async {
+        let (sut, spy) = makeSUT()
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(emptyReleasesPage()))
+        await task.value
+
+        #expect(sut.isLoading == false)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
