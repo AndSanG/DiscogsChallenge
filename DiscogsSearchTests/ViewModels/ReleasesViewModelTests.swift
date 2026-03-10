@@ -57,6 +57,18 @@ struct ReleasesViewModelTests {
         #expect(sut.isLoading == false)
     }
 
+    @Test func load_deliversReleasesOnSuccess() async {
+        let (sut, spy) = makeSUT()
+        let expected = [anyRelease(id: 1, title: "OK Computer"), anyRelease(id: 2, title: "Kid A")]
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage(expected)))
+        await task.value
+
+        #expect(sut.releases == expected)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
