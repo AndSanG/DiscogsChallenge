@@ -97,6 +97,20 @@ struct ReleasesViewModelTests {
         await task2.value
     }
 
+    @Test func load_doesNotDeliverResultAfterSUTDeallocated() async {
+        let spy = ArtistReleasesLoaderSpy()
+        var sut: ReleasesViewModel? = ReleasesViewModel(artistID: 1, loader: spy)
+        weak var weakSUT = sut
+
+        let task = Task { await sut!.load() }
+        await waitForTaskToStart()
+        sut = nil
+        spy.complete(with: .success(emptyReleasesPage()))
+        await task.value
+
+        #expect(weakSUT == nil, "Expected ReleasesViewModel to be deallocated — potential memory leak")
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
