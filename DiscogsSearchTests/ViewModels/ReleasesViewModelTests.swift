@@ -159,6 +159,21 @@ struct ReleasesViewModelTests {
         #expect(sut.filteredReleases == [release2000])
     }
 
+    @Test func applyYearFilter_withNil_showsAllReleases() async {
+        let (sut, spy) = makeSUT()
+        let items = [anyRelease(id: 1, year: 1990), anyRelease(id: 2, year: 2000)]
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage(items)))
+        await task.value
+
+        sut.applyYearFilter(2000)
+        sut.applyYearFilter(nil)
+
+        #expect(sut.filteredReleases == items)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
