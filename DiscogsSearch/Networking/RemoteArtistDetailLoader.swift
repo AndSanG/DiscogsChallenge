@@ -1,9 +1,16 @@
 import Foundation
 
 public final class RemoteArtistDetailLoader: ArtistDetailLoader, @unchecked Sendable {
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, LocalizedError {
         case connectivity
         case invalidData
+
+        public var errorDescription: String? {
+            switch self {
+            case .connectivity: return "Check your internet connection and try again."
+            case .invalidData: return "Something went wrong. Please try again."
+            }
+        }
     }
 
     private let client: any HTTPClient
