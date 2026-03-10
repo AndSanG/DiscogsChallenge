@@ -17,16 +17,32 @@ struct SearchView: View {
             } else if viewModel.items.isEmpty && !viewModel.isLoading {
                 ContentUnavailableView.search(text: searchText)
             } else {
-                List(viewModel.items, id: \.id) { artist in
-                    NavigationLink(value: artist) {
-                        ArtistRow(artist: artist)
+                List {
+                    ForEach(viewModel.items, id: \.id) { artist in
+                        NavigationLink(value: artist) {
+                            ArtistRow(artist: artist)
+                        }
+                        .onAppear {
+                            if artist.id == viewModel.items.last?.id {
+                                Task { await viewModel.loadNextPage() }
+                            }
+                        }
+                    }
+
+                    if viewModel.isLoading && !viewModel.items.isEmpty {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
                     }
                 }
                 .listStyle(.plain)
             }
         }
         .overlay(alignment: .top) {
-            if viewModel.isLoading { ProgressView().padding(.top, 8) }
+            if viewModel.isLoading && viewModel.items.isEmpty { ProgressView().padding(.top, 8) }
         }
         .navigationTitle("Search")
         .navigationBarTitleDisplayMode(.large)
