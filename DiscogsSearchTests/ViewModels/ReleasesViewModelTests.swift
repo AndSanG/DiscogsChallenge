@@ -9,6 +9,20 @@ struct ReleasesViewModelTests {
         #expect(spy.loadCallCount == 0)
     }
 
+    @Test func load_requestsReleasesFromLoader() async {
+        let (sut, spy) = makeSUT(artistID: 7)
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+
+        #expect(spy.loadCallCount == 1)
+        #expect(spy.receivedRequests.first?.artistID == 7)
+        #expect(spy.receivedRequests.first?.page == 1)
+
+        spy.complete(with: .success(emptyReleasesPage()))
+        await task.value
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
