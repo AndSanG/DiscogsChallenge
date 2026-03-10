@@ -142,6 +142,23 @@ struct ReleasesViewModelTests {
         #expect(spy.loadCallCount == 1)
     }
 
+    // MARK: - Filter tests
+
+    @Test func applyYearFilter_showsOnlyReleasesMatchingYear() async {
+        let (sut, spy) = makeSUT()
+        let release1990 = anyRelease(id: 1, year: 1990)
+        let release2000 = anyRelease(id: 2, year: 2000)
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage([release1990, release2000])))
+        await task.value
+
+        sut.applyYearFilter(2000)
+
+        #expect(sut.filteredReleases == [release2000])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {

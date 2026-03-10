@@ -28,6 +28,12 @@ func makeReleasesPage(_ items: [Release] = [], hasNextPage: Bool = false) -> Pag
     Page(items: items, hasNextPage: hasNextPage)
 }
 
-func anyRelease(id: Int = 1, title: String = "Any Album") -> Release {
-    Release(id: id, title: title, year: 2000, genres: [], labels: [], thumbnailURL: nil, type: "master")
+func anyRelease(
+    id: Int = 1,
+    title: String = "Any Album",
+    year: Int? = 2000,
+    genres: [String] = [],
+    labels: [String] = []
+) -> Release {
+    Release(id: id, title: title, year: year, genres: genres, labels: labels, thumbnailURL: nil, type: "master")
 }

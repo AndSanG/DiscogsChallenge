@@ -10,8 +10,20 @@ public final class ReleasesViewModel {
 
     public private(set) var isLoading = false
     public private(set) var releases: [Release] = []
-    public private(set) var errorMessage: String? = nil
+    public private(set) var errorMessage: String?
     public private(set) var hasNextPage = false
+
+    public private(set) var activeYearFilter: Int?
+
+    public var filteredReleases: [Release] {
+        releases.filter { release in
+            activeYearFilter == nil || release.year == activeYearFilter
+        }
+    }
+
+    public func applyYearFilter(_ year: Int?) {
+        activeYearFilter = year
+    }
 
     public init(artistID: Int, loader: any ArtistReleasesLoader) {
         self.artistID = artistID
