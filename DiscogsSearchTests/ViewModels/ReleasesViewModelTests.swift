@@ -189,6 +189,21 @@ struct ReleasesViewModelTests {
         #expect(sut.filteredReleases == [rock])
     }
 
+    @Test func applyLabelFilter_showsOnlyReleasesMatchingLabel() async {
+        let (sut, spy) = makeSUT()
+        let capitol = anyRelease(id: 1, labels: ["Capitol"])
+        let columbia = anyRelease(id: 2, labels: ["Columbia"])
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage([capitol, columbia])))
+        await task.value
+
+        sut.applyLabelFilter("Capitol")
+
+        #expect(sut.filteredReleases == [capitol])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {

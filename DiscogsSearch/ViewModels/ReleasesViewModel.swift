@@ -15,11 +15,13 @@ public final class ReleasesViewModel {
 
     public private(set) var activeYearFilter: Int?
     public private(set) var activeGenreFilter: String?
+    public private(set) var activeLabelFilter: String?
 
     public var filteredReleases: [Release] {
         releases.filter { release in
             (activeYearFilter == nil || release.year == activeYearFilter) &&
-            (activeGenreFilter.map { release.genres.contains($0) } ?? true)
+            (activeGenreFilter.map { release.genres.contains($0) } ?? true) &&
+            (activeLabelFilter.map { release.labels.contains($0) } ?? true)
         }
     }
 
@@ -29,6 +31,10 @@ public final class ReleasesViewModel {
 
     public func applyGenreFilter(_ genre: String?) {
         activeGenreFilter = genre
+    }
+
+    public func applyLabelFilter(_ label: String?) {
+        activeLabelFilter = label
     }
 
     public init(artistID: Int, loader: any ArtistReleasesLoader) {
