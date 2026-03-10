@@ -111,6 +111,24 @@ struct ReleasesViewModelTests {
         #expect(weakSUT == nil, "Expected ReleasesViewModel to be deallocated — potential memory leak")
     }
 
+    @Test func loadNextPage_appendsReleasesOnSuccess() async {
+        let (sut, spy) = makeSUT()
+        let firstPage = [anyRelease(id: 1, title: "Pablo Honey")]
+        let secondPage = [anyRelease(id: 2, title: "The Bends")]
+
+        let task1 = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage(firstPage, hasNextPage: true)))
+        await task1.value
+
+        let task2 = Task { await sut.loadNextPage() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage(secondPage, hasNextPage: false)))
+        await task2.value
+
+        #expect(sut.releases == firstPage + secondPage)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
