@@ -129,6 +129,19 @@ struct ReleasesViewModelTests {
         #expect(sut.releases == firstPage + secondPage)
     }
 
+    @Test func loadNextPage_doesNothingWhenOnLastPage() async {
+        let (sut, spy) = makeSUT()
+
+        let task1 = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage([], hasNextPage: false)))
+        await task1.value
+
+        await sut.loadNextPage()
+
+        #expect(spy.loadCallCount == 1)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
