@@ -43,6 +43,10 @@ public final class ReleasesViewModel {
         activeLabelFilter = nil
     }
 
+    public var availableYears: [Int] {
+        Array(Set(releases.compactMap(\.year))).sorted(by: >)
+    }
+
     public init(artistID: Int, loader: any ArtistReleasesLoader) {
         self.artistID = artistID
         self.loader = loader
