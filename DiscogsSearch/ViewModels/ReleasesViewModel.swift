@@ -37,6 +37,12 @@ public final class ReleasesViewModel {
         activeLabelFilter = label
     }
 
+    public func clearFilters() {
+        activeYearFilter = nil
+        activeGenreFilter = nil
+        activeLabelFilter = nil
+    }
+
     public init(artistID: Int, loader: any ArtistReleasesLoader) {
         self.artistID = artistID
         self.loader = loader
