@@ -35,6 +35,12 @@ public final class SearchViewModel {
 
     public func onSearchTextChanged(_ text: String) {
         searchTask?.cancel()
+        guard !text.isEmpty else {
+            items = []
+            hasNextPage = false
+            errorMessage = nil
+            return
+        }
         searchTask = Task { [weak self] in
             try? await Task.sleep(for: .milliseconds(300))
             guard !Task.isCancelled else { return }
