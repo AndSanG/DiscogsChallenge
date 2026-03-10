@@ -1,28 +1,28 @@
 import Foundation
 
 enum ArtistReleasesMapper {
+    private struct ReleaseLabel: Decodable {
+        let name: String
+    }
+
+    private struct Item: Decodable {
+        let id: Int
+        let title: String
+        let year: Int?
+        let genres: [String]?
+        let labels: [ReleaseLabel]?
+        let thumb: String?
+        let type: String
+    }
+
+    private struct Pagination: Decodable {
+        let page: Int
+        let pages: Int
+    }
+
     private struct Root: Decodable {
         let releases: [Item]
         let pagination: Pagination
-
-        struct Item: Decodable {
-            let id: Int
-            let title: String
-            let year: Int?
-            let genres: [String]?
-            let labels: [Label]?
-            let thumb: String?
-            let type: String
-
-            struct Label: Decodable {
-                let name: String
-            }
-        }
-
-        struct Pagination: Decodable {
-            let page: Int
-            let pages: Int
-        }
     }
 
     static func map(_ data: Data, from response: HTTPURLResponse) throws -> Page<Release> {

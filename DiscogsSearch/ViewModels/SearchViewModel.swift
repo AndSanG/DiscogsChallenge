@@ -7,7 +7,7 @@ public final class SearchViewModel {
 
     public private(set) var items: [ArtistSearchResult] = []
     public private(set) var isLoading = false
-    public private(set) var errorMessage: String? = nil
+    public private(set) var errorMessage: String?
     public private(set) var hasNextPage = false
 
     @ObservationIgnored private var currentQuery = ""

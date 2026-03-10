@@ -1,23 +1,23 @@
 import Foundation
 
 enum ArtistDetailMapper {
+    private struct Image: Decodable {
+        let type: String
+        let uri: String
+    }
+
+    private struct RemoteMember: Decodable {
+        let id: Int
+        let name: String
+        let active: Bool?
+    }
+
     private struct Root: Decodable {
         let id: Int
         let name: String
         let profile: String
         let images: [Image]?
         let members: [RemoteMember]?
-
-        struct Image: Decodable {
-            let type: String
-            let uri: String
-        }
-
-        struct RemoteMember: Decodable {
-            let id: Int
-            let name: String
-            let active: Bool?
-        }
     }
 
     static func map(_ data: Data, from response: HTTPURLResponse) throws -> Artist {
@@ -26,7 +26,7 @@ enum ArtistDetailMapper {
             throw RemoteArtistDetailLoader.Error.invalidData
         }
 
-        let primaryImage = root.images?.first(where: { $0.type == "primary" })?.uri
+        let primaryImage = root.images?.first { $0.type == "primary" }?.uri
             ?? root.images?.first?.uri
         let members = root.members?.map { Member(id: $0.id, name: $0.name, isActive: $0.active ?? true) } ?? []
 

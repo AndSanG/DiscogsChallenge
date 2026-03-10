@@ -6,9 +6,9 @@ public final class ArtistDetailViewModel {
     private let artistID: Int
     private let loader: any ArtistDetailLoader
 
-    public private(set) var artist: Artist? = nil
+    public private(set) var artist: Artist?
     public private(set) var isLoading = false
-    public private(set) var errorMessage: String? = nil
+    public private(set) var errorMessage: String?
 
     public init(artistID: Int, loader: any ArtistDetailLoader) {
         self.artistID = artistID

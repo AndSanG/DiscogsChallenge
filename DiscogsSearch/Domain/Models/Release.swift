@@ -9,7 +9,15 @@ public struct Release: Sendable, Equatable {
     public let thumbnailURL: URL?
     public let type: String
 
-    public init(id: Int, title: String, year: Int?, genres: [String], labels: [String], thumbnailURL: URL?, type: String) {
+    public init(
+        id: Int,
+        title: String,
+        year: Int?,
+        genres: [String],
+        labels: [String],
+        thumbnailURL: URL?,
+        type: String
+    ) {
         self.id = id
         self.title = title
         self.year = year

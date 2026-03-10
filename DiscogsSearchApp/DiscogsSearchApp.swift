@@ -15,7 +15,9 @@ struct DiscogsSearchApp: App {
             decoratee: URLSessionHTTPClient(session: session),
             token: token
         )
-        let baseURL = URL(string: "https://api.discogs.com")!
+        guard let baseURL = URL(string: "https://api.discogs.com") else {
+            preconditionFailure("Malformed Discogs base URL")
+        }
 
         let searchLoader = RemoteArtistSearchLoader(client: client, baseURL: baseURL)
         detailLoader = RemoteArtistDetailLoader(client: client, baseURL: baseURL)
