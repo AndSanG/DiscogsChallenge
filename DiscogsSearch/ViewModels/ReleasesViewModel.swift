@@ -10,6 +10,7 @@ public final class ReleasesViewModel {
 
     public private(set) var isLoading = false
     public private(set) var releases: [Release] = []
+    public private(set) var errorMessage: String? = nil
 
     public init(artistID: Int, loader: any ArtistReleasesLoader) {
         self.artistID = artistID
@@ -19,9 +20,12 @@ public final class ReleasesViewModel {
     public func load() async {
         isLoading = true
         currentPage = 1
-        if let page = try? await loader.load(artistID: artistID, page: currentPage) {
+        defer { isLoading = false }
+        do {
+            let page = try await loader.load(artistID: artistID, page: currentPage)
             releases = page.items
+        } catch {
+            errorMessage = error.localizedDescription
         }
-        isLoading = false
     }
 }

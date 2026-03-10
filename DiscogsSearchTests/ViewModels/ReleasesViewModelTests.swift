@@ -69,6 +69,17 @@ struct ReleasesViewModelTests {
         #expect(sut.releases == expected)
     }
 
+    @Test func load_setsErrorMessageOnFailure() async {
+        let (sut, spy) = makeSUT()
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .failure(anyError()))
+        await task.value
+
+        #expect(sut.errorMessage != nil)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
