@@ -18,6 +18,7 @@ public final class ReleasesViewModel {
     }
 
     public func load() async {
+        errorMessage = nil
         isLoading = true
         currentPage = 1
         defer { isLoading = false }

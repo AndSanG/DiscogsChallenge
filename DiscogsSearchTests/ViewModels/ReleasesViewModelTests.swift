@@ -80,6 +80,23 @@ struct ReleasesViewModelTests {
         #expect(sut.errorMessage != nil)
     }
 
+    @Test func load_clearsErrorBeforeReloading() async {
+        let (sut, spy) = makeSUT()
+
+        let task1 = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .failure(anyError()))
+        await task1.value
+
+        let task2 = Task { await sut.load() }
+        await waitForTaskToStart()
+
+        #expect(sut.errorMessage == nil)
+
+        spy.complete(with: .success(emptyReleasesPage()))
+        await task2.value
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {
