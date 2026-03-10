@@ -174,6 +174,21 @@ struct ReleasesViewModelTests {
         #expect(sut.filteredReleases == items)
     }
 
+    @Test func applyGenreFilter_showsOnlyReleasesMatchingGenre() async {
+        let (sut, spy) = makeSUT()
+        let rock = anyRelease(id: 1, genres: ["Rock"])
+        let jazz = anyRelease(id: 2, genres: ["Jazz"])
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage([rock, jazz])))
+        await task.value
+
+        sut.applyGenreFilter("Rock")
+
+        #expect(sut.filteredReleases == [rock])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {

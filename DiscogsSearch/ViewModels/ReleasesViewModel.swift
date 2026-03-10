@@ -14,15 +14,21 @@ public final class ReleasesViewModel {
     public private(set) var hasNextPage = false
 
     public private(set) var activeYearFilter: Int?
+    public private(set) var activeGenreFilter: String?
 
     public var filteredReleases: [Release] {
         releases.filter { release in
-            activeYearFilter == nil || release.year == activeYearFilter
+            (activeYearFilter == nil || release.year == activeYearFilter) &&
+            (activeGenreFilter.map { release.genres.contains($0) } ?? true)
         }
     }
 
     public func applyYearFilter(_ year: Int?) {
         activeYearFilter = year
+    }
+
+    public func applyGenreFilter(_ genre: String?) {
+        activeGenreFilter = genre
     }
 
     public init(artistID: Int, loader: any ArtistReleasesLoader) {
