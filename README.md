@@ -154,5 +154,4 @@ This discipline is visible in the git history: the networking layer (Phase 2) an
 
 - **Offline support**: A local cache layer (CoreData store + `LocalArtistSearchLoader`) with a 7-day max-age policy and a `FeedLoaderWithFallbackComposite` that tries the cache first and falls back to the network
 - **Image caching**: An `NSCache`-backed `CachedAsyncImage` wrapper to avoid re-fetching thumbnails on scroll
-- **E2E tests on CI**: Add `DISCOGS_API_TOKEN` as a GitHub Actions secret so the `DiscogsSearchAPIEndToEndTests` scheme runs on every push
 - **Accessibility**: VoiceOver labels on artist thumbnails and release artwork
