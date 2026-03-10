@@ -41,6 +41,8 @@ targets:
           else
             echo "warning: SwiftLint not installed. Run: brew install swiftlint"
           fi
+        inputFiles:
+          - $(SRCROOT)/.swiftlint.yml
         basedOnDependencyAnalysis: false
 
   # ── iOS App ──────────────────────────────────────────────────────────────────
