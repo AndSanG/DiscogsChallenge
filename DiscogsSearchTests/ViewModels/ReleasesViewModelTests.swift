@@ -234,6 +234,18 @@ struct ReleasesViewModelTests {
         #expect(sut.availableYears == [2000, 1990])
     }
 
+    @Test func availableGenres_derivedFromLoadedReleases() async {
+        let (sut, spy) = makeSUT()
+        let items = [anyRelease(id: 1, genres: ["Rock", "Pop"]), anyRelease(id: 2, genres: ["Rock"])]
+
+        let task = Task { await sut.load() }
+        await waitForTaskToStart()
+        spy.complete(with: .success(makeReleasesPage(items)))
+        await task.value
+
+        #expect(sut.availableGenres == ["Pop", "Rock"])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(artistID: Int = 1) -> (sut: ReleasesViewModel, spy: ArtistReleasesLoaderSpy) {

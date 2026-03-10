@@ -47,6 +47,10 @@ public final class ReleasesViewModel {
         Array(Set(releases.compactMap(\.year))).sorted(by: >)
     }
 
+    public var availableGenres: [String] {
+        Array(Set(releases.flatMap(\.genres))).sorted()
+    }
+
     public init(artistID: Int, loader: any ArtistReleasesLoader) {
         self.artistID = artistID
         self.loader = loader
