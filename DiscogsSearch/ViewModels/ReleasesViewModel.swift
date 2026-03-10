@@ -69,6 +69,7 @@ public final class ReleasesViewModel {
             let page = try await loader.load(artistID: artistID, page: currentPage)
             releases = page.items
             hasNextPage = page.hasNextPage
+        } catch is CancellationError {
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -83,6 +84,7 @@ public final class ReleasesViewModel {
             let page = try await loader.load(artistID: artistID, page: currentPage)
             releases += page.items
             hasNextPage = page.hasNextPage
+        } catch is CancellationError {
         } catch {
             errorMessage = error.localizedDescription
         }

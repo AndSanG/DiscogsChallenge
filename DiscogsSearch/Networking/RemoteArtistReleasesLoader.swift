@@ -27,6 +27,8 @@ public final class RemoteArtistReleasesLoader: ArtistReleasesLoader, @unchecked 
         let response: HTTPURLResponse
         do {
             (data, response) = try await client.get(from: url, headers: [:])
+        } catch is CancellationError {
+            throw CancellationError()
         } catch {
             throw Error.connectivity
         }

@@ -21,6 +21,7 @@ public final class ArtistDetailViewModel {
         defer { isLoading = false }
         do {
             artist = try await loader.load(artistID: artistID)
+        } catch is CancellationError {
         } catch {
             errorMessage = error.localizedDescription
         }

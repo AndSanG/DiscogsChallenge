@@ -28,6 +28,7 @@ public final class SearchViewModel {
             let page = try await loader.load(query: query, page: currentPage)
             items = page.items
             hasNextPage = page.hasNextPage
+        } catch is CancellationError {
         } catch {
             errorMessage = error.localizedDescription
         }
