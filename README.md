@@ -92,7 +92,7 @@ This means every unit test runs in complete isolation with no network calls.
 
 ## What was tested and why
 
-**61 tests total — all run on macOS, no simulator required.**
+**69 tests total — all run on macOS, no simulator required.**
 
 **Phase 2 — Remote API layer (29 tests)**
 - `RemoteArtistSearchLoader` (9 tests): init side-effects, URL construction, connectivity error, non-200 responses, invalid JSON, empty list, items mapping, memory safety
@@ -100,10 +100,10 @@ This means every unit test runs in complete isolation with no network calls.
 - `RemoteArtistReleasesLoader` (9 tests): same contract for releases endpoint
 - `URLSessionHTTPClient` (3 tests): correct URL/method, error delivery, data+response delivery — driven with `URLProtocol` stubs, no URLSession subclassing
 
-**Phase 5 — ViewModel layer (32 tests)**
+**Phase 5 — ViewModel layer (40 tests)**
 - `SearchViewModel` (12 tests): init side-effects, load triggers loader, `isLoading` during/after request, items delivered on success, error message on failure, error cleared on reload, memory safety, pagination append, no-op on last page, search debounce
 - `ArtistDetailViewModel` (9 tests): same loading contract for artist detail
-- `ReleasesViewModel` (11 tests): same loading contract + pagination for releases
+- `ReleasesViewModel` (19 tests): same loading contract + pagination for releases + 8 filter tests (year/genre/label apply, clear, computed available options)
 
 All tests use **Swift Testing** (`import Testing`) with continuation-based spies for precise async timing control.
 
@@ -118,10 +118,39 @@ All tests use **Swift Testing** (`import Testing`) with continuation-based spies
 
 ---
 
+## Code quality — SwiftLint
+
+SwiftLint is wired into the `DiscogsSearch` build phase via `project.yml`. The rule set (`.swiftlint.yml`) enables opt-in rules beyond the defaults:
+
+| Rule | Opt-in? | Violations found | Resolution |
+|------|---------|-----------------|------------|
+| `force_unwrapping` | yes | 3 (URL inits in 2 loaders + app root) | Replaced `!` with `guard`/`preconditionFailure` |
+| `nesting` | default | 6 (nested `struct` inside `enum` in all three Mappers) | Moved nested types to enum scope; renamed inner `Label` → `ReleaseLabel` to avoid collision |
+| `statement_position` | default | 1 (`catch` on its own line in `RemoteArtistDetailLoader`) | Expanded single-line `do/catch` to multi-line |
+| `implicit_return` / `optional_initialization` | yes | 3 (`= nil` on optional vars in two ViewModels) | Dropped explicit `= nil` initialisation |
+| `line_length` + `multiline_parameters` | yes | 1 (`Release.init` at 123 chars) | Expanded to one-parameter-per-line |
+| `trailing_closure` | yes | 1 (`first(where: { })` in `ArtistDetailMapper`) | Changed to trailing-closure form `first { }` |
+
+After fixes, `swiftlint lint` reports **zero warnings**.
+
+---
+
+## Development process
+
+The project was built with a strict **Red → Green → Refactor → Commit** TDD cycle enforced by a custom runbook:
+
+1. Each new behaviour started as a failing test (`#expect` assertion with no production code).
+2. The minimum production code to make it green was written — nothing more.
+3. Once green, the test + implementation were committed as a single atomic commit.
+4. No phase advanced until every test in that phase had its own commit.
+
+This discipline is visible in the git history: the networking layer (Phase 2) and ViewModel layer (Phase 5) each have one commit per test, making bisecting and code review straightforward.
+
+---
+
 ## What I would improve or add next
 
 - **Offline support**: A local cache layer (CoreData store + `LocalArtistSearchLoader`) with a 7-day max-age policy and a `FeedLoaderWithFallbackComposite` that tries the cache first and falls back to the network
 - **Image caching**: An `NSCache`-backed `CachedAsyncImage` wrapper to avoid re-fetching thumbnails on scroll
-- **Pagination in search**: The search results list currently loads one page; adding infinite scroll (mirroring the releases list) would use the existing `hasNextPage` / `loadNextPage()` ViewModel API
 - **E2E tests on CI**: Add `DISCOGS_API_TOKEN` as a GitHub Actions secret so the `DiscogsSearchAPIEndToEndTests` scheme runs on every push
 - **Accessibility**: VoiceOver labels on artist thumbnails and release artwork
