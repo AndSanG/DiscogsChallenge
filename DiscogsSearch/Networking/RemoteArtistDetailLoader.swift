@@ -29,6 +29,8 @@ public final class RemoteArtistDetailLoader: ArtistDetailLoader, @unchecked Send
             (data, response) = try await client.get(from: url, headers: [:])
         } catch is CancellationError {
             throw CancellationError()
+        } catch let urlError as URLError where urlError.code == .cancelled {
+            throw CancellationError()
         } catch {
             throw Error.connectivity
         }
